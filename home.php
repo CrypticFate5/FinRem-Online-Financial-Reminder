@@ -381,7 +381,7 @@ $branchid = $details["branchid"];
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "select * from tasks";
+                        $sql = "select * from tasks where bank_id='$branchid'";
                         $result = mysqli_query($conn, $sql);
                         $sno = 0;
                         while ($data = mysqli_fetch_assoc($result)) {

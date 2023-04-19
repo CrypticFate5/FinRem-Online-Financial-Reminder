@@ -1,5 +1,11 @@
 <?php
 include 'partials/_session.php';
+$user = $_SESSION['userid'];
+$sql = "select* from users where userid='$user';";
+$result = mysqli_query($conn, $sql);
+$details = mysqli_fetch_assoc($result);
+$name = $details["name"];
+$branchid = $details["branchid"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +60,7 @@ include 'partials/_session.php';
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "select * from tasks order by task_date";
+                    $sql = "select * from tasks where bank_id='$branchid' order by task_date";
                     $result = mysqli_query($conn, $sql);
                     $sno = 0;
                     while ($data = mysqli_fetch_assoc($result)) {

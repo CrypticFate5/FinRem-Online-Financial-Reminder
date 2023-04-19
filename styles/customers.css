@@ -1,0 +1,45 @@
+* {
+    color: white;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.table {
+    margin: 3vh;
+    padding: 4vh;
+    margin-top: 4vh;
+    width: 90vw;
+    border: 2px solid white;
+}
+
+.dataTables_filter,
+.dataTables_length {
+    margin-bottom: 3vh;
+}
+
+#customersTable {
+    width: 90vw !important;
+}
+
+th {
+    margin-top: 2vh;
+}
+
+th,
+td {
+    margin: 2vh;
+    padding: 0.7vh;
+    border: 0.1vh solid white;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Chivo Mono', monospace;
+    margin-top: 4vh;
+    padding-bottom: 4vh;
+}

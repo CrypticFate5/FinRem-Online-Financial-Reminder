@@ -1,0 +1,63 @@
+* {
+    color: white;
+}
+
+.notice {
+    text-align: center;
+}
+
+.main-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 8vh;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Chivo Mono', monospace;
+    padding-bottom: 4vh;
+    margin-top: 4vh;
+}
+
+.passwordSettings,
+.formContainer,
+.reminderSettings {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 50vh;
+    width: 30vw;
+    border: 2px solid white;
+}
+
+.alert {
+    font-size: small;
+    text-align: center;
+}
+
+.recurringRem {
+    border: 2px solid white;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.schedule {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid white;
+    width: 100%;
+}
+
+.op {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

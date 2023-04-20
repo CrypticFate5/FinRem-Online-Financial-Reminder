@@ -111,25 +111,25 @@ $branchid = $details["branchid"];
                 $postSancInsp = $_POST["postSancInsp"];
                 $sql1="update accounts set trigPriority=0 where trigPriority=1;";
                 $sql2="update documentation set trigPriority=0 where trigPriority=1;";
+                $sql3 = "insert into accounts values('$branchid','$custId','$loanAcctNo','$acctOpenDate','$savingsAcctNo','$loanType','$loanScheme','$sanctionAmt','$sanctionDate','$tenure','$lastReview','$nextReview',1);";
+                $sql4="insert into documentation values('$branchid','$custId','$loanAcctNo','$insuranceComp','$insuranceType','$insuranceFrom','$insuranceTo','$premium','$processingChgs','$mortgageChgs','$stampChgs','$inspectionChgs','$vettingChgs','$postSancInsp',1);";
+                // The next 8 lines are written inorder to unbuffer the php so as to run all the query here and as well as the fetch ones in the table to display(php can only one query at a time but this breaks up and executes it all)
                 $stmt1=mysqli_prepare($conn,$sql1);
                 $stmt2=mysqli_prepare($conn,$sql1);
-                $temp=mysqli_multi_query($conn,$sql1);
-                $temp1=mysqli_multi_query($conn,$sql2);
+                $stmt3=mysqli_prepare($conn,$sql3);
+                $stmt4=mysqli_prepare($conn,$sql4);
                 mysqli_stmt_store_result($stmt1);
                 mysqli_stmt_store_result($stmt2);
-                $sql3 = "insert into accounts values('$branchid','$custId','$loanAcctNo','$acctOpenDate','$savingsAcctNo','$loanType','$loanScheme','$sanctionAmt','$sanctionDate','$tenure','$lastReview','$nextReview',1);";
-                $stmt3=mysqli_prepare($conn,$sql3);
                 mysqli_stmt_store_result($stmt3);
-                $result1=mysqli_query($conn,$sql3);
-                $sql4="insert into documentation values('$branchid','$custId','$loanAcctNo','$insuranceComp','$insuranceType','$insuranceFrom','$insuranceTo','$premium','$processingChgs','$mortgageChgs','$stampChgs','$inspectionChgs','$vettingChgs','$postSancInsp',1);";
-                $stmt4=mysqli_prepare($conn,$sql4);
                 mysqli_stmt_store_result($stmt4);
-                $result2=mysqli_query($conn,$sql4);
-                if(isset($result1)&&isset($result2)){
-                    $acctInsert=true;
+                try{
+                    $temp1=mysqli_query($conn,$sql1);
+                    $temp2=mysqli_query($conn,$sql2);
+                    $result1=mysqli_query($conn,$sql3);
+                    $result2=mysqli_query($conn,$sql4);
                 }
-                else{
-                    $fail=true;
+                catch(Exception $e){
+                    $failAcct=true;
                 }
                 break;
         }

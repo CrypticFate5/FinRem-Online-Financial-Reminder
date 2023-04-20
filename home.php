@@ -127,6 +127,7 @@ $branchid = $details["branchid"];
                     $temp2=mysqli_query($conn,$sql2);
                     $result1=mysqli_query($conn,$sql3);
                     $result2=mysqli_query($conn,$sql4);
+                    $acctInsert=true;
                 }
                 catch(Exception $e){
                     $failAcct=true;
@@ -268,11 +269,11 @@ $branchid = $details["branchid"];
                                         <label for="loanType">Type of Loan</label>
                                         <select name="loanType" id="loanType" required>
                                             <option value="None">----</option>
-                                            <option value="personal">Personal</option>
-                                            <option value="car">Car</option>
-                                            <option value="two_wheeler">Two Wheeler</option>
-                                            <option value="business">Business</option>
-                                            <option value="education">Education</option>
+                                            <option value="Personal">Personal</option>
+                                            <option value="Car">Car</option>
+                                            <option value="Two Wheeler">Two Wheeler</option>
+                                            <option value="Business">Business</option>
+                                            <option value="Education">Education</option>
                                         </select>
                                     </div>
                                     <div class="obj">

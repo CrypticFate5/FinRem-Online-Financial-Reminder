@@ -47,10 +47,15 @@ $branchid = $details["branchid"];
             </div>
         </nav>
     </header>
-    <h1>CUSTOMERS</h1>
     <div class="main">
+        <div class="innerHeader">
+            <div class="alertCont"></div>
+            <div class="title">
+                <h1>Customers</h1>
+            </div>
+        </div>
         <div class="table">
-            <table id="customersTable" data-page-length="8">
+            <table id="customersTable">
                 <thead>
                     <th>Customer ID</th>
                     <th>Name</th>
@@ -92,8 +97,8 @@ $branchid = $details["branchid"];
                                     <span id='close' class='close'>&times;</span>
                                     <h2>Address</h2>
                                 </div>
-                                <div class='modal-body'>
-                                    <table id='addrTable'>
+                                <div class='modalBody'>
+                                    <table id='addrTable' data-page-length='7'>
                                         <thead>
                                             <th>Name</th>
                                             <th>House Number</th>
@@ -147,7 +152,13 @@ $branchid = $details["branchid"];
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#customersTable').DataTable();
+        $('#customersTable').DataTable({
+            "sScrollY": ($(window).height() - 350),
+            "lengthChange":false,
+            "paginate":false,
+            "info":false,
+            scrollCollapse:true
+        });
     });
 </script>
 <script src="customers.js"></script>

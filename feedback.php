@@ -17,6 +17,7 @@ include 'partials/_session.php';
     <link rel="icon" href="images/logo1.png">
     <link rel="stylesheet" href="partials/navbar.css">
     <link rel="stylesheet" href="styles/feedback.css">
+    <link rel="stylesheet" href="partials/essentials.css">
 </head>
 
 <body>
@@ -40,23 +41,38 @@ include 'partials/_session.php';
         </nav>
     </header>
     <?php
+    $formSub = false;
+    $formError = false;
     include 'partials/_dbconnect.php';
     $user = $_SESSION["userid"];
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $rating = $_POST["rating"];
         $comments = $_POST["feed"];
         $sql = "insert into feedback values('$user','$rating','$comments');";
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-            echo '<div class="alert alert-success" role="alert">
-            Feedback Submitted !
-          </div>';
+        try {
+            $result = mysqli_query($conn, $sql);
+            $formSub = true;
+        } catch (Exception $e) {
+            $formError = true;
         }
     }
     ?>
-    
-    <div class="main-feedback">
-    <h1>RATE OUR APPLICATION !</h1>
+
+    <div class="main">
+        <div class="innerHeader">
+            <div class="alertCont">
+                <?php
+                if ($formSub == true) {
+                    echo "<p><img src='images/success.png' class='alertImg'> Feedback Submitted Successfully</p>";
+                } elseif ($formError == true) {
+                    echo "<p><img src='images/warning.png' class='alertImg'>Error in Submitting</p>";
+                }
+                ?>
+            </div>
+            <div class="title">
+                <h1>Rate Us !</h1>
+            </div>
+        </div>
         <form action="feedback.php" method="post" class="feedbackForm">
             <div class="formRating">
                 <div class="rat">
@@ -86,8 +102,12 @@ include 'partials/_session.php';
             </div>
             <button type="submit" class="submitBtn">Submit</button>
         </form>
-
     </div>
 </body>
-
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script>
+    setTimeout(function() {
+        $('.alertCont p').fadeOut(1000);
+    }, 8000);
+</script>
 </html>

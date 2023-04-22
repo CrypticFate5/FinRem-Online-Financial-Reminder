@@ -2,17 +2,31 @@
     color: white;
 }
 
-.main {
+/* Header */
+
+.innerHeader {
+    height: 15vh;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
 }
 
+.title {
+    display: flex;
+    flex-direction: column;
+    height: 10vh;
+    align-items: center;
+    justify-content: space-around;
+}
+
+/* Main */
 
 .table {
-    margin: 3vh;
-    padding: 4vh;
-    margin-top: 4vh;
+    position: relative;
+    min-height: 66vh;
+    top: -3vh;
+    padding: 3vh;
     width: 90vw;
     border: 2px solid white;
 }
@@ -22,9 +36,6 @@
     margin-bottom: 3vh;
 }
 
-#customersTable {
-    width: 90vw !important;
-}
 
 th {
     margin-top: 2vh;
@@ -37,9 +48,32 @@ td {
     border: 0.1vh solid white;
 }
 
-h1 {
-    text-align: center;
-    font-family: 'Chivo Mono', monospace;
-    margin-top: 4vh;
-    padding-bottom: 4vh;
+#customersTable.dataTable tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
+.addBtn {
+    height: 3vh;
+    width: 8vw;
+    border: none;
+    font-size: 1.8vh;
+    color: black;
+    border-radius: 1vh;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    background: rgba(8, 0, 255, 0.541);
+}
+
+.addBtn:hover {
+    background-color: white;
+}
+
+/* Modal */
+.modalBody {
+    height: 15vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }

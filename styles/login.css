@@ -2,13 +2,20 @@
     color: rgb(255, 255, 255);
 }
 
-.main {
+/* Header */
+.alertCont {
+    /* color: transparent; */
+    background: none;
+    /* background-color: black; */
+    height: 10vh;
+    position: absolute;
+    top: 5vh;
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-around;
-    height: 88.5vh;
-    width: auto;
 }
+
+/* Main */
 
 .formContainer {
     border: 0.2vh solid white;
@@ -42,13 +49,29 @@
 .inp {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.label {
+    position: relative;
+    top: -7.7vh;
+    left: -7vw;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.inp input:valid~span,
+.inp input:focus~span {
+    color: yellow;
+    transform: translate(1vh, -1.7vw);
+    font-size: small;
+    background: transparent;
 }
 
 i {
     background-color: transparent;
-    position: relative;
-    top: -7.55vh;
-    left: 0.5vw;
 }
 
 #username,
@@ -57,7 +80,7 @@ i {
     outline: none;
     height: 8vh;
     width: 20vw;
-    border-radius: 5vh;
+    border-radius: 4vh;
     margin: 0 0 2vh 0;
     padding: 0 0 0 4vh;
     background: rgba(255, 255, 255, 0.15);
@@ -80,16 +103,4 @@ i {
 .loginbtn:hover {
     background-color: white;
     box-shadow: 0 12px 16px 0 rgba(231, 214, 214, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
-}
-.alertCont{
-    height: 3.5vh;
-}
-.alert {
-    border: none;
-    text-align: center;
-    height: 3.5vh;
-}
-
-.text-danger {
-    background-color: #f8d7da;
 }

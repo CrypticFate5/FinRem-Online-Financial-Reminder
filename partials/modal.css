@@ -12,11 +12,9 @@
 
 
 .modal-header {
-    padding: 2px 16px;
-    background-color: rgb(30, 30, 30);
+    
     color: white;
     text-align: center;
-    padding-bottom: 1vh;
     margin: 1vh;
     border-bottom: 1px solid white;
 }
@@ -26,10 +24,12 @@
     align-items: center;
     justify-content: center;
     padding: 2px 16px;
+    background:url("../images/bg.png");
 }
 
 
 .modal-content {
+    background:url("../images/bg.png");
     position: relative;
     background-color: rgb(30, 30, 30);
     margin: auto;

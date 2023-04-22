@@ -1,20 +1,19 @@
+@import url("essentials.css");
 * {
     margin: 0;
     padding: 0;
-    background-color: rgb(30, 30, 30);
     font-family: 'Poppins', sans-serif;
-}
-
-input {
-    color-scheme: dark;
+    color-scheme: dark !important;
 }
 
 nav {
     background-color: rgb(255, 106, 0);
     height: 8vh ;
+    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    /* position: fixed; */
 }
 
 .logo {
@@ -27,15 +26,7 @@ nav {
     background-color: rgb(255, 106, 0);
 }
 
-/* .logo h1,
-.logo sub {
-    color: black;
-    background-color: rgb(255, 106, 0);
-}
 
-.logo sub {
-    font-size: 1.4vh;
-} */
 .logo a img{
     display: block;
     height: 8vh;
@@ -62,7 +53,9 @@ nav {
     border: none;
     font-size: 2vh;
     color: black;
+    cursor: pointer;
 }
+
 
 .navitems li button:hover,
 .logout button:hover {

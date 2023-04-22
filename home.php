@@ -11,7 +11,7 @@ $branchid = $details["branchid"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<!-- hello -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,13 +27,94 @@ $branchid = $details["branchid"];
     <link rel="stylesheet" href="partials/modal.css">
     <link rel="icon" href="images/logo1.png">
 </head>
+<?php
+$custInsert = false;
+$acctInsert = false;
+$failCust = false;
+$failAcct = false;
+$custExits = false;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    switch ($_POST["action"]) {
+        case "custAdd":
+            $custId = $_POST["custId"];
+            $custName = $_POST["custName"];
+            $phone = $_POST["phone"];
+            $dob = $_POST["dob"];
+            $email = $_POST["email"];
+            $aadhar = $_POST["aadhar"];
+            $pan = $_POST["pan"];
+            $houseNo = $_POST["houseNo"];
+            $stName = $_POST["stName"];
+            $location = $_POST["location"];
+            $city = $_POST["city"];
+            $taluk = $_POST["taluk"];
+            $district = $_POST["district"];
+            $state = $_POST["state"];
+            $pincode = $_POST["pincode"];
+            $sql = "insert into customers values('$branchid','$custId','$custName','$phone','$dob','$aadhar','$pan','$email','$houseNo','$stName','$location','$city','$taluk','$district','$state','$pincode');";
+            try {
+                $result = mysqli_query($conn, $sql);
+                $custInsert = true;
+            } catch (Exception $e) {
+                $failCust = true;
+            }
 
-<style>
-    <?php
-    include "styles/home.css";
-    include "partials/navbar.css";
-    ?>
-</style>
+            break;
+        case "acctAdd":
+            $custId = $_POST["custId"];
+            $loanAcctNo = $_POST["loanAcctNo"];
+            $acctOpenDate = $_POST["acctOpenDate"];
+            $savingsAcctNo = $_POST["savingsAcctNo"];
+            $loanType = $_POST["loanType"];
+            $loanScheme = $_POST["loanScheme"];
+            $sanctionAmt = $_POST["sanctionAmt"];
+            $sanctionDate = $_POST["sanctionDate"];
+            $tenure = $_POST["tenure"];
+            $lastReview = $_POST["lastReview"];
+            $nextReview = $_POST["nextReview"];
+            $insuranceComp = $_POST["insuranceComp"];
+            $insuranceType = $_POST["insuranceType"];
+            $insuranceFrom = $_POST["insuranceFrom"];
+            $insuranceTo = $_POST["insuranceTo"];
+            $premium = $_POST["premium"];
+            $processingChgs = $_POST["processingChgs"];
+            $mortgageChgs = $_POST["mortgageChgs"];
+            $stampChgs = $_POST["stampChgs"];
+            $inspectionChgs = $_POST["inspectionChgs"];
+            $vettingChgs = $_POST["vettingChgs"];
+            $postSancInsp = $_POST["postSancInsp"];
+            $sqlCustCheck = "select cust_id from customers where cust_id='$custId';";
+            try {
+                $resCheck = mysqli_query($conn, $sqlCustCheck);
+                $sql1 = "update accounts set trigPriority=0 where trigPriority=1;";
+                $sql2 = "update documentation set trigPriority=0 where trigPriority=1;";
+                $sql3 = "insert into accounts values('$branchid','$custId','$loanAcctNo','$acctOpenDate','$savingsAcctNo','$loanType','$loanScheme','$sanctionAmt','$sanctionDate','$tenure','$lastReview','$nextReview',1);";
+                $sql4 = "insert into documentation values('$branchid','$custId','$loanAcctNo','$insuranceComp','$insuranceType','$insuranceFrom','$insuranceTo','$premium','$processingChgs','$mortgageChgs','$stampChgs','$inspectionChgs','$vettingChgs','$postSancInsp',1);";
+                // The next 8 lines are written inorder to unbuffer the php so as to run all the query here and as well as the fetch ones in the table to display(php can only one query at a time but this breaks up and executes it all)
+                $stmt1 = mysqli_prepare($conn, $sql1);
+                $stmt2 = mysqli_prepare($conn, $sql1);
+                $stmt3 = mysqli_prepare($conn, $sql3);
+                $stmt4 = mysqli_prepare($conn, $sql4);
+                mysqli_stmt_store_result($stmt1);
+                mysqli_stmt_store_result($stmt2);
+                mysqli_stmt_store_result($stmt3);
+                mysqli_stmt_store_result($stmt4);
+                try {
+                    $temp1 = mysqli_query($conn, $sql1);
+                    $temp2 = mysqli_query($conn, $sql2);
+                    $result1 = mysqli_query($conn, $sql3);
+                    $result2 = mysqli_query($conn, $sql4);
+                    $acctInsert = true;
+                } catch (Exception $e) {
+                    $failAcct = true;
+                }
+            } catch (Exception $e) {
+                $custExits = true;
+            }
+            break;
+    }
+}
+?>
 
 <body>
     <header>
@@ -52,329 +133,62 @@ $branchid = $details["branchid"];
                 <li><a href="partials/_logout.php"><button>Logout</button></a></li>
             </ul>
         </nav>
+
     </header>
-    <?php
-    $custInsert = false;
-    $acctInsert = false;
-    $failCust = false;
-    $failAcct=false;
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        switch ($_POST["action"]) {
-            case "custAdd":
-                $custId = $_POST["custId"];
-                $custName = $_POST["custName"];
-                $phone = $_POST["phone"];
-                $dob = $_POST["dob"];
-                $email = $_POST["email"];
-                $aadhar = $_POST["aadhar"];
-                $pan = $_POST["pan"];
-                $houseNo = $_POST["houseNo"];
-                $stName = $_POST["stName"];
-                $location = $_POST["location"];
-                $city = $_POST["city"];
-                $taluk = $_POST["taluk"];
-                $district = $_POST["district"];
-                $state = $_POST["state"];
-                $pincode = $_POST["pincode"];
-                $sql = "insert into customers values('$branchid','$custId','$custName','$phone','$dob','$aadhar','$pan','$email','$houseNo','$stName','$location','$city','$taluk','$district','$state','$pincode');";
-                try{
-                    $result = mysqli_query($conn, $sql);
-                    $custInsert=true;
-                }
-                catch(Exception $e){
-                    $failCust=true;
-                }
-                
-                break;
-            case "acctAdd":
-                $custId = $_POST["custId"];
-                $loanAcctNo = $_POST["loanAcctNo"];
-                $acctOpenDate = $_POST["acctOpenDate"];
-                $savingsAcctNo = $_POST["savingsAcctNo"];
-                $loanType = $_POST["loanType"];
-                $loanScheme = $_POST["loanScheme"];
-                $sanctionAmt = $_POST["sanctionAmt"];
-                $sanctionDate = $_POST["sanctionDate"];
-                $tenure = $_POST["tenure"];
-                $lastReview = $_POST["lastReview"];
-                $nextReview = $_POST["nextReview"];
-                $insuranceComp = $_POST["insuranceComp"];
-                $insuranceType = $_POST["insuranceType"];
-                $insuranceFrom = $_POST["insuranceFrom"];
-                $insuranceTo = $_POST["insuranceTo"];
-                $premium = $_POST["premium"];
-                $processingChgs = $_POST["processingChgs"];
-                $mortgageChgs = $_POST["mortgageChgs"];
-                $stampChgs = $_POST["stampChgs"];
-                $inspectionChgs = $_POST["inspectionChgs"];
-                $vettingChgs = $_POST["vettingChgs"];
-                $postSancInsp = $_POST["postSancInsp"];
-                $sql1="update accounts set trigPriority=0 where trigPriority=1;";
-                $sql2="update documentation set trigPriority=0 where trigPriority=1;";
-                $sql3 = "insert into accounts values('$branchid','$custId','$loanAcctNo','$acctOpenDate','$savingsAcctNo','$loanType','$loanScheme','$sanctionAmt','$sanctionDate','$tenure','$lastReview','$nextReview',1);";
-                $sql4="insert into documentation values('$branchid','$custId','$loanAcctNo','$insuranceComp','$insuranceType','$insuranceFrom','$insuranceTo','$premium','$processingChgs','$mortgageChgs','$stampChgs','$inspectionChgs','$vettingChgs','$postSancInsp',1);";
-                // The next 8 lines are written inorder to unbuffer the php so as to run all the query here and as well as the fetch ones in the table to display(php can only one query at a time but this breaks up and executes it all)
-                $stmt1=mysqli_prepare($conn,$sql1);
-                $stmt2=mysqli_prepare($conn,$sql1);
-                $stmt3=mysqli_prepare($conn,$sql3);
-                $stmt4=mysqli_prepare($conn,$sql4);
-                mysqli_stmt_store_result($stmt1);
-                mysqli_stmt_store_result($stmt2);
-                mysqli_stmt_store_result($stmt3);
-                mysqli_stmt_store_result($stmt4);
-                try{
-                    $temp1=mysqli_query($conn,$sql1);
-                    $temp2=mysqli_query($conn,$sql2);
-                    $result1=mysqli_query($conn,$sql3);
-                    $result2=mysqli_query($conn,$sql4);
-                    $acctInsert=true;
-                }
-                catch(Exception $e){
-                    $failAcct=true;
-                }
-                break;
-        }
-    }
-    ?>
-    <div class="alertCont">
-        <?php
-        if ($custInsert == true) {
-            echo "Customer Added Successfully";
-        } elseif ($acctInsert == true) {
-            echo "Account Added Successfully";
-        } elseif ($failCust == true) {
-            echo "Customer ID already exists !";
-        }
-        ?>
-    </div>
+
     <div class="main">
-        <div class="title">
-            <h1>Welcome
-                <?php echo $name . " !";
-                ?>
-            </h1>
-            <h4>
+        <div class="innerHeader">
+            <div class="alertCont">
                 <?php
-                echo $branchid . " ";
-                echo " @" . $user;
+                if ($custInsert == true) {
+                    echo "<p><img src='images/success.png' class='alertImg'> Customer Added Successfully</p>";
+                } elseif ($failAcct == true) {
+                    echo "<p><img src='images/warning.png' class='alertImg'>Customer does not exist! Try adding customer first</p>";
+                } elseif ($acctInsert == true) {
+                    echo "<p><img src='images/success.png' class='alertImg'>Account Added Successfully</p>";
+                } elseif ($failCust == true) {
+                    echo "<p><img src='images/warning.png' class='alertImg'>Customer ID already exists</p>";
+                }
                 ?>
-            </h4>
+            </div>
+            <div class="title">
+                <h1>Welcome
+                    <?php echo $name . " !";
+                    ?>
+                </h1>
+                <h4>
+                    <?php
+                    echo $branchid . " ";
+                    echo " @" . $user;
+                    ?>
+                </h4>
+            </div>
         </div>
+
         <div class="container">
             <div class="buttons">
                 <div class="addCust">
                     <button id="myBtn1" class="addBtn">Add Customer</button>
-                    <div id="myModal1" class="modal">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <span id="close1" class="close">&times;</span>
-                                <h2>Add Customers</h2>
-                            </div>
-                            <div class="modal-body">
-                                <form action="#" method="post" class="formContainer">
-                                    <div class="obj">
-                                        <label for="custId">Customer ID</label>
-                                        <input type="text" name="custId" id="custId" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="custName">Name</label>
-                                        <input type="text" name="custName" id="custName" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="phone">Phone</label>
-                                        <input type="text" name="phone" id="phone" maxlength="10" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="dob">Date of Birth</label>
-                                        <input type="date" name="dob" id="dob" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="email">Email</label>
-                                        <input type="email" name="email" id="email" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="aadhar">Aadhar Number</label>
-                                        <input type="text" name="aadhar" id="aadhar" maxlength="12" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="pan">PAN</label>
-                                        <input type="text" name="pan" id="pan" maxlength="10" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="houseNo">House Number</label>
-                                        <input type="text" name="houseNo" id="houseNo" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="stName">Street Name</label>
-                                        <input type="text" name="stName" id="stName" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="location">Location</label>
-                                        <input type="text" name="location" id="location" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="city">City</label>
-                                        <input type="text" name="city" id="city" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="taluk">Taluk</label>
-                                        <input type="text" name="taluk" id="taluk" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="district">District</label>
-                                        <input type="text" name="district" id="district" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="state">State</label>
-                                        <input type="text" name="state" id="state" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="pincode">Pincode</label>
-                                        <input type="text" name="pincode" id="pincode" maxlength="6" required>
-                                    </div>
-                                    <input type="hidden" name="action" value="custAdd">
-                                    <button type="submit" class="subBtn">Add</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                    include 'modals/homeCustAdd.php';
+                    ?>
+                </div>
+                <div class="updateCustomer">
+                    <button id="myBtn3" class="addBtn">Update Customer</button>
+                    <?php
+                    include 'modals/homeCustUpdate.php';
+                    ?>
                 </div>
                 <div class="addAccount">
                     <button id="myBtn2" class="addBtn">Add Account</button>
-                    <div id="myModal2" class="modal">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <span id="close2" class="close">&times;</span>
-                                <h2>Add Account</h2>
-                            </div>
-                            <div class="modal-body">
-                                <form action="#" method="post" class="formContainer">
-                                    <div class="obj">
-                                        <label for="custId">Customer ID</label>
-                                        <input type="text" name="custId" id="custId" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="loanAcctNo">Loan Account Number</label>
-                                        <input type="text" name="loanAcctNo" id="loanAcctNo" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="acctOpenDate">Account Opening Date</label>
-                                        <input type="date" name="acctOpenDate" id="acctOpenDate" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="savingsAcctNo">Savings Account Number</label>
-                                        <input type="text" name="savingsAcctNo" id="savingsAcctNo" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="loanType">Type of Loan</label>
-                                        <select name="loanType" id="loanType" required>
-                                            <option value="None">----</option>
-                                            <option value="Personal">Personal</option>
-                                            <option value="Car">Car</option>
-                                            <option value="Two Wheeler">Two Wheeler</option>
-                                            <option value="Business">Business</option>
-                                            <option value="Education">Education</option>
-                                        </select>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="loanScheme">Loan Scheme</label>
-                                        <input type="text" name="loanScheme" id="loanScheme" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="sanctionAmt">Sanction Amount</label>
-                                        <input type="number" step="0.01" name="sanctionAmt" id="sanctionAmt" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="sanctionDate">Sanction Date</label>
-                                        <input type="date" name="sanctionDate" id="sanctionDate" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="tenure">Tenure (in months)</label>
-                                        <input type="number" name="tenure" id="tenure" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="lastReview">Last Review Date</label>
-                                        <input type="date" name="lastReview" id="lastReview" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="nextReview">Next Review Date</label>
-                                        <input type="date" name="nextReview" id="nextReview" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="insuranceComp">Insurance Company</label>
-                                        <select name="insuranceComp" id="insuranceComp">
-                                            <option value="None">----</option>
-                                            <option value="MS Chola">MS Chola</option>
-                                            <option value="Tata AIG">Tata AIG</option>
-                                            <option value="Niva Bupa">Niva Bupa</option>
-                                            <option value="Star">Star</option>
-                                            <option value="India First">India First</option>
-                                            <option value="NIC">NIC</option>
-                                            <option value="UIC">UIC</option>
-                                        </select>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="insuranceType">Insurance Type</label>
-                                        <select name="insuranceType" id="insuranceType">
-                                            <option value="None">----</option>
-                                            <option value="Fire">Fire</option>
-                                            <option value="Burglary">Burglary</option>
-                                            <option value="Property">Property</option>
-                                            <option value="Stock">Stock</option>
-                                            <option value="Asset">Asset</option>
-                                            <option value="Vehicle">Vehicle</option>
-                                        </select>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="insuranceFrom">Insurance From</label>
-                                        <input type="date" name="insuranceFrom" id="insuranceFrom" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="insuranceTo">Insurance To</label>
-                                        <input type="date" name="insuranceTo" id="insuranceTo" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="premium">Premium Amount</label>
-                                        <input type="number" step="0.01" name="premium" id="premium" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="processingChgs">Processing Charges</label>
-                                        <input type="number" step="0.01" name="processingChgs" id="processingChgs" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="mortgageChgs">Mortgage Charges</label>
-                                        <input type="number" step="0.01" name="mortgageChgs" id="mortgageChgs" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="stampChgs">Stamp Charges</label>
-                                        <input type="number" step="0.01" name="stampChgs" id="stampChgs" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="inspectionChgs">Inspection Charges</label>
-                                        <input type="number" step="0.01" name="inspectionChgs" id="inspectionChgs" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="vettingChgs">Vetting Charges</label>
-                                        <input type="number" step="0.01" name="vettingChgs" id="vettingChgs" required>
-                                    </div>
-                                    <div class="obj">
-                                        <label for="postSancInsp">Post Sanction Inspection</label>
-                                        <select name="postSancInsp" id="postSancInsp">
-                                            <option value="None">----</option>
-                                            <option value="Available">Available</option>
-                                            <option value="Not Available">Not Available</option>
-                                        </select>
-                                    </div>
-                                    <input type="hidden" name="action" value="acctAdd">
-                                    <button type="submit" class="subBtn">Add</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                    <?php
+                    include 'modals/homeAcctAdd.php';
+                    ?>
                 </div>
             </div>
             <div class="tasks">
-                <table id="tasksTable" data-page-length="10">
+                <table id="tasksTable" data-page-length="6" class="display">
+                    <caption>Upcoming Tasks</caption>
                     <thead>
                         <th>S.No.</th>
                         <th>Task</th>
@@ -382,7 +196,7 @@ $branchid = $details["branchid"];
                     </thead>
                     <tbody>
                         <?php
-                        $sql = "select * from tasks where bank_id='$branchid'";
+                        $sql = "select * from tasks where bank_id='$branchid' order by task_date";
                         $result = mysqli_query($conn, $sql);
                         $sno = 0;
                         while ($data = mysqli_fetch_assoc($result)) {
@@ -392,9 +206,9 @@ $branchid = $details["branchid"];
                             $dueDate = $data["task_date"];
                             echo "
                         <tr>
-                            <td>$sno</td>
-                            <td>$taskType due for AcctNo: $acctNo</td>
-                            <td>$dueDate</td>
+                        <td>$sno</td>
+                        <td>$taskType due for AcctNo: $acctNo</td>
+                        <td>$dueDate</td>
                         </tr>";
                         }
                         ?>
@@ -409,8 +223,17 @@ $branchid = $details["branchid"];
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#tasksTable').DataTable();
+        $('#tasksTable').DataTable({
+            "lengthChange": false,
+            "paginate": false,
+            "info": false,
+            scrollY: '250px',
+            scrollCollapse: true
+        });
     });
+    setTimeout(function() {
+        $('.alertCont p').fadeOut(1000);
+    }, 8000);
 </script>
 
 </html>

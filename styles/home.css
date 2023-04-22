@@ -1,24 +1,56 @@
 * {
     color: white;
-    background-color: rgb(30, 30, 30);
+    /* background-color: rgb(30, 30, 30); */
     font-family: 'Poppins', sans-serif;
+
 }
 
-.container {
+/* Header */
+
+.innerHeader {
+    height: 20vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.title {
+    /* border: 2px solid white; */
+    position: relative;
+    top: 5vh;
+    display: flex;
+    flex-direction: column;
+    height: 10vh;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 10vh;
 }
 
 .alertCont {
+    /* color: transparent; */
+    background: none;
+    /* background-color: black; */
+    height: 10vh;
+    position: absolute;
+    top: 5vh;
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 3.5vh;
+    align-items: center;
+}
+
+/* Main */
+
+.container {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .addBtn {
-    height: 5vh;
+    height: 4.8vh;
     width: 8vw;
     border: none;
     font-size: 1.8vh;
@@ -36,35 +68,27 @@
     box-shadow: 0 12px 16px 0 rgba(231, 214, 214, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
 }
 
-.title {
-    /* border: 2px solid white; */
+.buttons {
+    width: 50vw;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    margin-bottom: 10vh;
 }
 
-.buttons {
-    /* border: 2px solid white; */
-    height: 40vh;
-    width: 20vw;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    margin: 3vh;
-}
+/* Table */
 
 .dataTables_filter,
 .dataTables_length {
     margin-bottom: 3vh;
 }
 
+#tasksTable.dataTable tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.15);
+}
+
 .tasks {
-    padding: 2vh;
-    height: 60vh;
-    width: 40vw;
+    padding: 3vh;
+    width: 50vw;
     border: 2px solid white;
 }
 

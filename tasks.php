@@ -5,11 +5,42 @@ $sql = "select* from users where userid='$user';";
 $result = mysqli_query($conn, $sql);
 $details = mysqli_fetch_assoc($result);
 $name = $details["name"];
+$reviewChangeOk=false;
+$reviewError=false;
 $branchid = $details["branchid"];
-if($_SERVER["REQUEST_METHOD"]=="POST"){
-    $nextRev=$_POST["newReviewDate"];
-    $lastRev=date("y-m-d");
-    $sql="update ";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nextRev = $_POST["newReviewDate"];
+    $lastRev = date("y-m-d");
+    $task=$_POST["task"];
+    $currAcct=$_POST["currAcct"];
+    if($task=="insurance"){
+        $sql1="update documentation set trigPriority=0 where trigPriority=1;";
+        $sql2="update documentation set insurance_from='$lastRev', insurance_to='$nextRev' ,trigPriority=1 where loan_acctno='$currAcct';";
+        // $stmt=mysqli_prepare($conn,$sql);
+        // mysqli_stmt_store_result($stmt);
+        try{
+            mysqli_query($conn,$sql1);
+            mysqli_query($conn,$sql2);
+            $reviewChangeOk=true;
+        }
+        catch(Exception $e){
+            $reviewError=true;
+        }
+    }
+    else{
+        $sql1="update accounts set trigPriority=0 where trigPriority=1;";
+        $sql2="update accounts set last_review='$lastRev',next_review='$nextRev',trigPriority=1 where loan_acctno='$currAcct';";
+        // $stmt=mysqli_prepare($conn,$sql);
+        // mysqli_stmt_store_result($stmt);
+        try{
+            mysqli_query($conn,$sql1);
+            mysqli_query($conn,$sql2);
+            $reviewChangeOk=true;
+        }
+        catch(Exception $e){
+            $reviewError=true;
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -27,9 +58,10 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
     <link rel="icon" href="images/logo1.png">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="styles/tasks.css">
     <link rel="stylesheet" href="partials/navbar.css">
     <link rel="stylesheet" href="partials/modal.css">
+    <link rel="stylesheet" href="styles/tasks.css">
+    <link rel="stylesheet" href="partials/essentials.css">
 </head>
 
 
@@ -54,9 +86,23 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
         </nav>
     </header>
     <div class="main">
-        <h1>TASKS</h1>
+        <div class="innerHeader">
+            <div class="alertCont">
+                <?php
+                if($reviewChangeOk==true){
+                    echo "<p><img src='images/success.png' class='alertImg'>Account Reviewed Successfully</p>";
+                }
+                else if($reviewError==true){
+                    echo "<p><img src='images/warning.png' class='alertImg'>Account Review Unsuccessfully</p>";
+                }
+                ?>
+            </div>
+            <div class="title">
+                <h1>Upcoming Tasks</h1>
+            </div>
+        </div>
         <div class="tableContainer">
-            <table id="tasksTable" data-page-length="10">
+            <table id="tasksTable" class="display" data-page-length="10">
                 <thead>
                     <th>S.No.</th>
                     <th>Loan AcctNo.</th>
@@ -266,10 +312,16 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
                                         <h2>Push Due Dates</h2>
                                     </div>
                                     <div class='modal-body'>
-                                    <form action='#' method='post'>
-                                    <label for='newReviewDate'>New Review Date</label>
-                                    <input type='date' name='newReviewDate' id='newReviewDate'>
-                                    <button type='submit'>Push</button>
+                                    <form action='#' method='post' class='modalBody'>
+                                    <div class='cont'>
+                                        <label for='newReviewDate'>New Review Date</label>
+                                        <input type='date' name='newReviewDate' id='newReviewDate' required>
+                                        <input type='hidden' name='currAcct' id='currAcct' value='$loanAcctNo'>
+                                        <input type='hidden' name='task' id='task' value='$taskType'>
+                                    </div>
+                                    <div class='cont'>
+                                        <button type='submit' class='pushBtn'>Push</button>
+                                    </div>
                                </form> 
                                     </div>
                                 </div>
@@ -288,8 +340,17 @@ if($_SERVER["REQUEST_METHOD"]=="POST"){
 <script src="tasks.js"></script>
 <script>
     $(document).ready(function() {
-        $('#tasksTable').DataTable();
+        $('#tasksTable').DataTable({
+            "sScrollY": ($(window).height() - 350),
+            "lengthChange":false,
+            "paginate":false,
+            "info":false,
+            scrollCollapse:true
+        });
     });
+    setTimeout(function() {
+        $('.alertCont p').fadeOut(1000);
+    }, 8000);
 </script>
 
 </html>

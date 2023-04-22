@@ -18,6 +18,7 @@ include 'partials/_session.php';
     <link rel="icon" href="images/logo1.png">
     <link rel="stylesheet" href="partials/navbar.css">
     <link rel="stylesheet" href="styles/settings.css">
+    <link rel="stylesheet" href="partial/essentials.css">
 </head>
 <?php
 $userid = $_SESSION["userid"];
@@ -93,95 +94,97 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </nav>
     </header>
-    <h1>SETTINGS</h1>
-    <div class="main-settings">
-        <div class="reminderSettings">
-            <h3>Reminder Settings</h3>
-            <form action="settings.php" method="post" class="formContainer">
+    <div class="main">
+        <div class="innerHeader">
+            <div class="alertCont">
                 <?php
-                if ($remChangeOk) {
-                    echo '<div class="alert alert-success" role="alert">
-                Changes Made Successfully
-              </div>';
+                if ($remChangeOk == true) {
+                    echo "<p><img src='images/success.png' class='alertImg'>  Changes Made Successfully</p>";
                 } else if ($remChangeTrigger == false) {
-                    echo '<div class="alert alert-success" role="alert">
-                Error in Changes
-              </div>';
+                    echo "<p><img src='images/warning.png' class='alertImg'>  Error in Changes</p>";
+                }
+                if ($currPassCheck == false) {
+                    echo "<p><img src='images/warning.png' class='alertImg'>  Current Password Does Not Match</p>";
+                } elseif ($changeOk == false)
+                    echo "<p><img src='images/success.png' class='alertImg'>  Passwords Do Not Match</p>";
+                else if ($changeOk == true && $changePassTrigger == true) {
+                    echo "<p><img src='images/success.png' class='alertImg'>  Changes Made Successfully</p>";
                 }
                 ?>
-                <div class="containerEmail">
-                    <label for="remEmail">Email</label>
-                    <input type="hidden" name="action" value="remSettings">
-                    <input type="email" name="remEmail" id="remEmail" required>
-                </div>
-                <div class="recurringRem">
-                    <p>
-                        Recurring reminders for pending task
-                    </p>
-                    <div class="op">
-                        <label for="recur1">Yes</label>
-                        <input type="radio" name="recur" id="recur1" value='1' checked>
-                    </div>
-                    <div class="op">
-                        <label for="recur2">No</label>
-                        <input type="radio" name="recur" id="recur2" value='0'>
-                    </div>
-                </div>
-                <div class="schedule">
-                    <p>Reminder Frequency</p>
-                    <div class="op">
-                        <label for="day">Everyday</label>
-                        <input type="checkbox" name="day" id="day" value='1'>
-                    </div>
-                    <div class="op">
-                        <label for="week">Every Week</label>
-                        <input type="checkbox" name="week" id="week" value='1' checked>
-                    </div>
-                    <div class="op">
-                        <label for="month">Every Month</label>
-                        <input type="checkbox" name="month" id="month" value='1'>
-                    </div>
-                </div>
-                <button type="submit">Send Reminders</button>
-            </form>
+            </div>
+            <div class="title">
+                <h1>Settings</h1>
+            </div>
         </div>
-        <div class="passwordSettings">
-            <h3>Change Password</h3>
-            <form action="settings.php" method="post" class="formContainer">
-                <div class="notice">
-                    <?php
-                    if ($currPassCheck == false) {
-                        echo '<div class="alert alert-success" role="alert">
-        Current Password is Wrong
-      </div>';
-                    } elseif ($changeOk == false)
-                        echo '<div class="alert alert-success" role="alert">
-        Password Does Not Match
-      </div>';
-                    else if ($changeOk == true && $changePassTrigger == true) {
-                        echo '<div class="alert alert-success" role="alert">
-        Password Changed Successfully
-      </div>';
-                    }
-                    ?>
-                </div>
-                <div class="containerPass">
-                    <label for="currPass">Current Password</label>
-                    <input type="password" name="currPass" id="currPass" required>
-                </div>
-                <div class="containerPass">
-                    <label for="newPass">New Password</label>
-                    <input type="password" name="newPass" id="newPass" required>
-                </div>
-                <div class="containerPass">
-                    <label for="conPass">Confirm Password</label>
-                    <input type="password" name="conPass" id="conPass" required>
-                </div>
-                <input type="hidden" name="action" value="passSettings">
-                <button type="submit">Change</button>
-            </form>
+        <div class="settingPanel">
+            <div class="reminderSettings">
+                <h2>Reminder Settings</h2>
+                <form action="settings.php" method="post" class="formContainer1">
+                    <div class="containerEmail">
+                        <label for="remEmail">Email</label>
+                        <input type="hidden" name="action" value="remSettings">
+                        <input type="email" name="remEmail" id="remEmail" required>
+                    </div>
+                    <div class="recurringRem">
+                        <p>
+                            Recurring reminders for pending task
+                        </p>
+                        <div class="op">
+                            <label for="recur1">Yes</label>
+                            <input type="radio" name="recur" id="recur1" value='1' checked>
+                        </div>
+                        <div class="op">
+                            <label for="recur2">No</label>
+                            <input type="radio" name="recur" id="recur2" value='0'>
+                        </div>
+                    </div>
+                    <div class="schedule">
+                        <p>Reminder Frequency</p>
+                        <div class="op">
+                            <label for="day">Everyday</label>
+                            <input type="checkbox" name="day" id="day" value='1'>
+                        </div>
+                        <div class="op">
+                            <label for="week">Every Week</label>
+                            <input type="checkbox" name="week" id="week" value='1' checked>
+                        </div>
+                        <div class="op">
+                            <label for="month">Every Month</label>
+                            <input type="checkbox" name="month" id="month" value='1'>
+                        </div>
+                    </div>
+                    <input type="hidden" name="action" value="passSettings">
+                    <button class="subBtn" type="submit">Send Reminders</button>
+                </form>
+            </div>
+            <div class="passwordSettings">
+                <h2>Change Password</h2>
+                <form action="settings.php" method="post" class="formContainer">
+                    <div class="containerPass">
+                        <input type="password" name="currPass" id="currPass" required>
+                        <span class="label"><span><i class="bx bx-lock"></i></span> Current Password</span>
+                    </div>
+                    <div class="containerPass">
+                        <input type="password" name="conPass" id="conPass" required>
+                        <span class="label"><span><i class="bx bx-lock"></i></span> New Password</span>
+                    </div>
+                    <div class="containerPass">
+                        <input type="password" name="newPass" id="newPass" required>
+                        <span class="label"><span><i class="bx bx-lock"></i></span> Confirm Password</span>
+                    </div>
+                    <input type="hidden" name="action" value="passSettings">
+                    <button class="subBtn" type="submit">Change</button>
+                </form>
+            </div>
         </div>
+
     </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script>
+    setTimeout(function() {
+        $('.alertCont p').fadeOut(1000);
+    }, 8000);
+</script>
 
 </html>

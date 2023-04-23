@@ -19,14 +19,14 @@
 
 .formContainer {
     border: 0.2vh solid white;
-    border: thick double white;
     border-radius: 2.5vh;
-    height: 53vh;
-    width: 25vw;
+    height: 60vh;
+    width: 27vw;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-shadow: 0 0 2vh rgb(176, 176, 7);
 }
 
 .formHeader {
@@ -103,4 +103,17 @@ i {
 .loginbtn:hover {
     background-color: white;
     box-shadow: 0 12px 16px 0 rgba(231, 214, 214, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+.forgotPass{
+    font-size: medium;
+    margin-bottom: 4vh;
+}
+.forgotPass a{
+    text-decoration: none;
+    color: rgb(7, 235, 201);
+    transition: 0.3s;
+}
+.forgotPass a:hover{
+    color: yellow;
 }

@@ -87,9 +87,12 @@
 }
 
 .tasks {
+    margin-top: 1vh;
     padding: 3vh;
     width: 50vw;
     border: 2px solid white;
+    border-radius: 1.6vh;
+    box-shadow: 0 0 1vh rgb(176, 176, 7);
 }
 
 th,

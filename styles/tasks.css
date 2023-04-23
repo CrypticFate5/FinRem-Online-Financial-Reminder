@@ -46,6 +46,8 @@
     padding: 3vh;
     border: 2px solid white;
     width: 90vw;
+    border-radius: 2vh;
+    box-shadow: 0 0 2vh rgb(176, 176, 7);
 }
 
 table,

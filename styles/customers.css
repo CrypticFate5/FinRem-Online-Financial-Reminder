@@ -29,6 +29,8 @@
     padding: 3vh;
     width: 90vw;
     border: 2px solid white;
+    border-radius: 2vh;
+    box-shadow: 0 0 2vh rgb(176, 176, 7);
 }
 
 .dataTables_filter,
@@ -70,6 +72,7 @@ td {
 }
 
 /* Modal */
+
 .modalBody {
     height: 15vh;
     display: flex;

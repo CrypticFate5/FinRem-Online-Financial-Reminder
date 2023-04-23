@@ -75,12 +75,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="password" name="password" id="password" required>
                     <span class="label"><span><i class="bx bx-lock"></i></span>  Password</span>
                 </div>
+                <div class="forgotPass">
+                    <a href="#">Forgot Password ?</a>
+                </div>
                 <button class="loginbtn">Login</button>
             </form>
         </div>
     </div>
 </body>
-
-
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script>
+    setTimeout(function() {
+        $('.alertCont p').fadeOut(1000);
+    }, 8000);
+</script>
 
 </html>

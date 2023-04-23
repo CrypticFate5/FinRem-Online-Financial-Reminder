@@ -38,9 +38,9 @@
 }
 
 .settingPanel {
-    width: 75vw;
+    width: 72vw;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -56,6 +56,8 @@
     height: 60vh;
     width: 30vw;
     border: 2px solid white;
+    border-radius: 2vh;
+    box-shadow: 0 0 2vh rgb(176, 176, 7);
 }
 
 .formContainer {

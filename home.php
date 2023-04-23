@@ -33,6 +33,7 @@ $acctInsert = false;
 $failCust = false;
 $failAcct = false;
 $custExits = false;
+$custNotExits = false;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     switch ($_POST["action"]) {
         case "custAdd":
@@ -51,14 +52,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $district = $_POST["district"];
             $state = $_POST["state"];
             $pincode = $_POST["pincode"];
-            $sql = "insert into customers values('$branchid','$custId','$custName','$phone','$dob','$aadhar','$pan','$email','$houseNo','$stName','$location','$city','$taluk','$district','$state','$pincode');";
+            $sqlCustCheck = "select cust_id from customers where cust_id='$custId';";
             try {
-                $result = mysqli_query($conn, $sql);
-                $custInsert = true;
+                $res = mysqli_query($conn, $sqlCustCheck);
+                if (count(mysqli_fetch_all($res)) == 0) {
+                    $sql = "insert into customers values('$branchid','$custId','$custName','$phone','$dob','$aadhar','$pan','$email','$houseNo','$stName','$location','$city','$taluk','$district','$state','$pincode');";
+                    try {
+                        $result = mysqli_query($conn, $sql);
+                        $custInsert = true;
+                    } catch (Exception $e) {
+                        $failCust = true;
+                    }
+                } else {
+                    $custExits = true;
+                }
             } catch (Exception $e) {
                 $failCust = true;
             }
-
             break;
         case "acctAdd":
             $custId = $_POST["custId"];
@@ -86,30 +96,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sqlCustCheck = "select cust_id from customers where cust_id='$custId';";
             try {
                 $resCheck = mysqli_query($conn, $sqlCustCheck);
-                $sql1 = "update accounts set trigPriority=0 where trigPriority=1;";
-                $sql2 = "update documentation set trigPriority=0 where trigPriority=1;";
-                $sql3 = "insert into accounts values('$branchid','$custId','$loanAcctNo','$acctOpenDate','$savingsAcctNo','$loanType','$loanScheme','$sanctionAmt','$sanctionDate','$tenure','$lastReview','$nextReview',1);";
-                $sql4 = "insert into documentation values('$branchid','$custId','$loanAcctNo','$insuranceComp','$insuranceType','$insuranceFrom','$insuranceTo','$premium','$processingChgs','$mortgageChgs','$stampChgs','$inspectionChgs','$vettingChgs','$postSancInsp',1);";
-                // The next 8 lines are written inorder to unbuffer the php so as to run all the query here and as well as the fetch ones in the table to display(php can only one query at a time but this breaks up and executes it all)
-                $stmt1 = mysqli_prepare($conn, $sql1);
-                $stmt2 = mysqli_prepare($conn, $sql1);
-                $stmt3 = mysqli_prepare($conn, $sql3);
-                $stmt4 = mysqli_prepare($conn, $sql4);
-                mysqli_stmt_store_result($stmt1);
-                mysqli_stmt_store_result($stmt2);
-                mysqli_stmt_store_result($stmt3);
-                mysqli_stmt_store_result($stmt4);
-                try {
-                    $temp1 = mysqli_query($conn, $sql1);
-                    $temp2 = mysqli_query($conn, $sql2);
-                    $result1 = mysqli_query($conn, $sql3);
-                    $result2 = mysqli_query($conn, $sql4);
-                    $acctInsert = true;
-                } catch (Exception $e) {
-                    $failAcct = true;
+                // $temp=mysqli_fetch_all($resCheck);
+                // echo var_dump($temp);
+                if (count(mysqli_fetch_all($resCheck)) == 1) {
+                    $sql1 = "update accounts set trigPriority=0 where trigPriority=1;";
+                    $sql2 = "update documentation set trigPriority=0 where trigPriority=1;";
+                    $sql3 = "insert into accounts values('$branchid','$custId','$loanAcctNo','$acctOpenDate','$savingsAcctNo','$loanType','$loanScheme','$sanctionAmt','$sanctionDate','$tenure','$lastReview','$nextReview',1);";
+                    $sql4 = "insert into documentation values('$branchid','$custId','$loanAcctNo','$insuranceComp','$insuranceType','$insuranceFrom','$insuranceTo','$premium','$processingChgs','$mortgageChgs','$stampChgs','$inspectionChgs','$vettingChgs','$postSancInsp',1);";
+                    // The next 8 lines are written inorder to unbuffer the php so as to run all the query here and as well as the fetch ones in the table to display(php can only one query at a time but this breaks up and executes it all)
+                    $stmt1 = mysqli_prepare($conn, $sql1);
+                    $stmt2 = mysqli_prepare($conn, $sql1);
+                    $stmt3 = mysqli_prepare($conn, $sql3);
+                    $stmt4 = mysqli_prepare($conn, $sql4);
+                    mysqli_stmt_store_result($stmt1);
+                    mysqli_stmt_store_result($stmt2);
+                    mysqli_stmt_store_result($stmt3);
+                    mysqli_stmt_store_result($stmt4);
+                    try {
+                        $temp1 = mysqli_query($conn, $sql1);
+                        $temp2 = mysqli_query($conn, $sql2);
+                        $result1 = mysqli_query($conn, $sql3);
+                        $result2 = mysqli_query($conn, $sql4);
+                        $acctInsert = true;
+                    } catch (Exception $e) {
+                        echo $e;
+                        $failAcct = true;
+                    }
+                } else {
+                    $custNotExits = true;
                 }
             } catch (Exception $e) {
-                $custExits = true;
+                $failAcct = true;
             }
             break;
     }
@@ -142,12 +159,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <?php
                 if ($custInsert == true) {
                     echo "<p><img src='images/success.png' class='alertImg'> Customer Added Successfully</p>";
+                } elseif ($custNotExits == true) {
+                    echo "<p><img src='images/warning.png' class='alertImg'> Customer does not exist! Try adding customer first</p>";
                 } elseif ($failAcct == true) {
-                    echo "<p><img src='images/warning.png' class='alertImg'>Customer does not exist! Try adding customer first</p>";
+                    echo "<p><img src='images/warning.png' class='alertImg'> Account Addition Unsuccessful</p>";
                 } elseif ($acctInsert == true) {
-                    echo "<p><img src='images/success.png' class='alertImg'>Account Added Successfully</p>";
-                } elseif ($failCust == true) {
-                    echo "<p><img src='images/warning.png' class='alertImg'>Customer ID already exists</p>";
+                    echo "<p><img src='images/success.png' class='alertImg'> Account Added Successfully</p>";
+                } elseif ($custExits == true) {
+                    echo "<p><img src='images/warning.png' class='alertImg'> Customer ID already exists</p>";
                 }
                 ?>
             </div>

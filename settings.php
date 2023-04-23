@@ -44,10 +44,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             update reminder set day='$day' where userid='$userid';
             update reminder set week='$week' where userid='$userid';
             update reminder set month='$month' where userid='$userid';";
-            $result = mysqli_multi_query($conn, $sql);
-            if ($result) {
-                $remChangeOk = true;
-            } else {
+            try{
+                $result = mysqli_multi_query($conn, $sql);
+                $remChangeOk=true;
+            }
+            catch(Exception $e){
                 $remChangeTrigger = false;
             }
             break;
@@ -106,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($currPassCheck == false) {
                     echo "<p><img src='images/warning.png' class='alertImg'>  Current Password Does Not Match</p>";
                 } elseif ($changeOk == false)
-                    echo "<p><img src='images/success.png' class='alertImg'>  Passwords Do Not Match</p>";
+                    echo "<p><img src='images/warning.png' class='alertImg'>  Passwords Do Not Match</p>";
                 else if ($changeOk == true && $changePassTrigger == true) {
                     echo "<p><img src='images/success.png' class='alertImg'>  Changes Made Successfully</p>";
                 }
@@ -119,47 +120,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="settingPanel">
             <div class="reminderSettings">
                 <h2>Reminder Settings</h2>
-                <form action="settings.php" method="post" class="formContainer1">
+                <form action="#" method="post" class="formContainer1">
                     <div class="containerEmail">
-                        <label for="remEmail">Email</label>
-                        <input type="hidden" name="action" value="remSettings">
                         <input type="email" name="remEmail" id="remEmail" required>
+                        <span class="label1"><span><i class="bx bx-envelope"></i></span> Email<sup>*</sup></span>
                     </div>
                     <div class="recurringRem">
                         <p>
                             Recurring reminders for pending task
                         </p>
-                        <div class="op">
-                            <label for="recur1">Yes</label>
-                            <input type="radio" name="recur" id="recur1" value='1' checked>
-                        </div>
-                        <div class="op">
-                            <label for="recur2">No</label>
-                            <input type="radio" name="recur" id="recur2" value='0'>
+                        <div class="options">
+                            <div class="op1">
+                                <label for="recur1">Yes</label>
+                                <input type="radio" name="recur" id="recur1" value='1' checked>
+                            </div>
+                            <div class="op1">
+                                <label for="recur2">No</label>
+                                <input type="radio" name="recur" id="recur2" value='0'>
+                            </div>
                         </div>
                     </div>
                     <div class="schedule">
                         <p>Reminder Frequency</p>
-                        <div class="op">
+                        
+                        <div class="op2">
                             <label for="day">Everyday</label>
                             <input type="checkbox" name="day" id="day" value='1'>
                         </div>
-                        <div class="op">
+                        <div class="op2">
                             <label for="week">Every Week</label>
                             <input type="checkbox" name="week" id="week" value='1' checked>
                         </div>
-                        <div class="op">
+                        <div class="op2">
                             <label for="month">Every Month</label>
                             <input type="checkbox" name="month" id="month" value='1'>
                         </div>
                     </div>
-                    <input type="hidden" name="action" value="passSettings">
+                    <input type="hidden" name="action" value="remSettings">
                     <button class="subBtn" type="submit">Send Reminders</button>
                 </form>
+                <sub>*Note: By Default the reminder will be sent to registered email</sub>
             </div>
             <div class="passwordSettings">
                 <h2>Change Password</h2>
-                <form action="settings.php" method="post" class="formContainer">
+                <form action="#" method="post" class="formContainer2">
                     <div class="containerPass">
                         <input type="password" name="currPass" id="currPass" required>
                         <span class="label"><span><i class="bx bx-lock"></i></span> Current Password</span>
@@ -177,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </form>
             </div>
         </div>
-
+        
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>

@@ -10,11 +10,11 @@ $reviewError=false;
 $branchid = $details["branchid"];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nextRev = $_POST["newReviewDate"];
-    $lastRev = date("y-m-d");
+    $lastRev = date("Y-m-d");
     $task=$_POST["task"];
     $currAcct=$_POST["currAcct"];
     if($task=="insurance"){
-        $sql1="update documentation set trigPriority=0 where trigPriority=1;";
+        $sql1="update documentation set trigPriority=0 where trigPriority=1 and loan_acctno!='$currAcct';";
         $sql2="update documentation set insurance_from='$lastRev', insurance_to='$nextRev' ,trigPriority=1 where loan_acctno='$currAcct';";
         // $stmt=mysqli_prepare($conn,$sql);
         // mysqli_stmt_store_result($stmt);
@@ -24,11 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $reviewChangeOk=true;
         }
         catch(Exception $e){
+            echo $e;
             $reviewError=true;
         }
     }
     else{
-        $sql1="update accounts set trigPriority=0 where trigPriority=1;";
+        $sql1="update accounts set trigPriority=0 where trigPriority=1 and loan_acctno!='$currAcct';";
         $sql2="update accounts set last_review='$lastRev',next_review='$nextRev',trigPriority=1 where loan_acctno='$currAcct';";
         // $stmt=mysqli_prepare($conn,$sql);
         // mysqli_stmt_store_result($stmt);
@@ -38,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $reviewChangeOk=true;
         }
         catch(Exception $e){
+            echo $e;
             $reviewError=true;
         }
     }
@@ -90,10 +92,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="alertCont">
                 <?php
                 if($reviewChangeOk==true){
-                    echo "<p><img src='images/success.png' class='alertImg'>Account Reviewed Successfully</p>";
+                    echo "<p><img src='images/success.png' class='alertImg'>  Account Reviewed Successfully</p>";
                 }
                 else if($reviewError==true){
-                    echo "<p><img src='images/warning.png' class='alertImg'>Account Review Unsuccessfully</p>";
+                    echo "<p><img src='images/warning.png' class='alertImg'>  Account Review Unsuccessful</p>";
                 }
                 ?>
             </div>
@@ -163,6 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         } else {
                             $temp = 'Not Available';
                         }
+                        $minDateCond=date("Y-m-d");
                         echo "
                         <tr>
                             <td>$sno</td>
@@ -315,7 +318,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <form action='#' method='post' class='modalBody'>
                                     <div class='cont'>
                                         <label for='newReviewDate'>New Review Date</label>
-                                        <input type='date' name='newReviewDate' id='newReviewDate' required>
+                                        <input type='date' min='$minDateCond' name='newReviewDate' id='newReviewDate' required>
                                         <input type='hidden' name='currAcct' id='currAcct' value='$loanAcctNo'>
                                         <input type='hidden' name='task' id='task' value='$taskType'>
                                     </div>

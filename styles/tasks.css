@@ -72,7 +72,7 @@ td {
 
 /* Buttons */
 
-.reviewBtn {
+#reviewBtn,#dueBtn{
     height: 3vh;
     width: 8vw;
     border: none;
@@ -82,11 +82,17 @@ td {
     outline: none;
     cursor: pointer;
     transition: 0.3s;
-    background: rgba(8, 0, 255, 0.541);
+    background: rgba(182, 113, 189, 0.818);
 }
 
-.reviewBtn:hover {
-    background-color: white;
+#dueBtn{
+    background: rgba(206, 167, 178, 0.818) !important;
+    transition: 0.3s;
+}
+
+#reviewBtn:hover,
+#dueBtn:hover {
+    background-color: white !important;
 }
 
 .pushBtn {

@@ -26,9 +26,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 2vh rgb(176, 176, 7);
+    box-shadow: 0 0 1.5vh rgb(176, 176, 7);
 }
-
+.formContainer:hover{
+    box-shadow: 0 0 2vh rgb(200, 200, 8);
+}
 .formHeader {
     height: 15vh;
 }

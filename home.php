@@ -192,12 +192,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     include 'modals/homeCustAdd.php';
                     ?>
                 </div>
-                <div class="updateCustomer">
+                <!-- <div class="updateCustomer">
                     <button id="myBtn3" class="addBtn">Update Customer</button>
                     <?php
                     include 'modals/homeCustUpdate.php';
                     ?>
-                </div>
+                </div> -->
                 <div class="addAccount">
                     <button id="myBtn2" class="addBtn">Add Account</button>
                     <?php

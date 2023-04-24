@@ -64,7 +64,7 @@ td {
     outline: none;
     cursor: pointer;
     transition: 0.3s;
-    background: rgba(8, 0, 255, 0.541);
+    background: rgba(184, 233, 38, 0.541);
 }
 
 .addBtn:hover {

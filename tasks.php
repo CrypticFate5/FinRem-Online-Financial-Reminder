@@ -307,7 +307,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                 </div>
                             </td>
-                            <td><button id='reviewBtn' class='reviewBtn'>Push Due Date</button>
+                            <td><button id='dueBtn' class='reviewBtn'>Push Due Date</button>
                             <div id='modal' class='modal'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>

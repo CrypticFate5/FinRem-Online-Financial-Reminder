@@ -133,39 +133,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $sql2 = "select * from documentation where loan_acctno='$acctNo';";
                         // $stmt2 = mysqli_prepare($conn, $sql2);
                         // mysqli_stmt_store_result($stmt2);
-                        $result1 = mysqli_query($conn, $sql1);
-                        $data1 = mysqli_fetch_assoc($result1);
-                        $custId = $data1["cust_id"];
-                        $loanAcctNo = $data1["loan_acctno"];
-                        $acctOpenDate = $data1["acct_opening"];
-                        $savingsAcctNo = $data1["savings_acctno"];
-                        $loanType = $data1["loan_type"];
-                        $loanScheme = $data1["loan_scheme"];
-                        $sanctionAmt = $data1["sanction_amt"];
-                        $sanctionDate = $data1["sanction_date"];
-                        $tenure = $data1["tenure"];
-                        $lastReview = $data1["last_review"];
-                        $nextReview = $data1["next_review"];
-                        $result2 = mysqli_query($conn, $sql2);
-                        $data2 = mysqli_fetch_assoc($result2);
-                        $insuranceComp = $data2["insurance_comp"];
-                        $insuranceType = $data2["insurance_type"];
-                        $insuranceFrom = $data2["insurance_from"];
-                        $insuranceTo = $data2["insurance_to"];
-                        $premium = $data2["premium"];
-                        $processingChgs = $data2["processing_charges"];
-                        $mortgageChgs = $data2["mortgage_charges"];
-                        $stampChgs = $data2["stamp_charges"];
-                        $inspectionChgs = $data2["inspection_charges"];
-                        $vettingChgs = $data2["vetting_charges"];
-                        $postSancInsp = $data2["post_sanction_inspection"];
-                        $temp = "";
-                        if ($postSancInsp == 1) {
-                            $temp = 'Available';
-                        } else {
-                            $temp = 'Not Available';
+                        try{
+                            $result1 = mysqli_query($conn, $sql1);
+                            $data1 = mysqli_fetch_assoc($result1);
+                            $custId = $data1["cust_id"];
+                            $loanAcctNo = $data1["loan_acctno"];
+                            $acctOpenDate = $data1["acct_opening"];
+                            $savingsAcctNo = $data1["savings_acctno"];
+                            $loanType = $data1["loan_type"];
+                            $loanScheme = $data1["loan_scheme"];
+                            $sanctionAmt = $data1["sanction_amt"];
+                            $sanctionDate = $data1["sanction_date"];
+                            $tenure = $data1["tenure"];
+                            $lastReview = $data1["last_review"];
+                            $nextReview = $data1["next_review"];
                         }
-                        $minDateCond=date("Y-m-d");
+                        catch(Exception $e){
+                            $taskFail=true;
+                        }
+                        try{
+                            $result2 = mysqli_query($conn, $sql2);
+                            $data2 = mysqli_fetch_assoc($result2);
+                            $insuranceComp = $data2["insurance_comp"];
+                            $insuranceType = $data2["insurance_type"];
+                            $insuranceFrom = $data2["insurance_from"];
+                            $insuranceTo = $data2["insurance_to"];
+                            $premium = $data2["premium"];
+                            $processingChgs = $data2["processing_charges"];
+                            $mortgageChgs = $data2["mortgage_charges"];
+                            $stampChgs = $data2["stamp_charges"];
+                            $inspectionChgs = $data2["inspection_charges"];
+                            $vettingChgs = $data2["vetting_charges"];
+                            $postSancInsp = $data2["post_sanction_inspection"];
+                            $temp = "";
+                            if ($postSancInsp == 1) {
+                                $temp = 'Available';
+                            } else {
+                                $temp = 'Not Available';
+                            }
+                            $minDateCond=date("Y-m-d");
+                        }
+                        catch(Exception $e){
+                            $taskFail=true;
+                        }
                         echo "
                         <tr>
                             <td>$sno</td>
